@@ -4,7 +4,7 @@
 """
 
 """
-from random import randrange
+from random import random
 from random import choice
 
 from kivy.animation import Animation
@@ -42,6 +42,9 @@ transition_list = [
     'out_quint',
     'out_sine']
 
+def rand(_min, _max):
+    return _min + random() * (_max - _min) 
+
 class Walker(object):
     def __init__(
             self,
@@ -64,12 +67,12 @@ class Walker(object):
             duration=(
                 self.dur
                 if self.dur
-                else randrange(self.min_dur, self.max_dur)),
+                else rand(self.min_dur, self.max_dur)),
             transition=(
                 self.trans
                 if self.trans
                 else choice(transition_list)),
-            **{self.bnp.name: randrange(
+            **{self.bnp.name: rand(
                 self.bnp.get_min(self.widget),
                 self.bnp.get_max(self.widget))})
         anim.bind(on_complete=self.on_complete)
