@@ -49,15 +49,11 @@ class TweenerPatchBoard(PatchBoard):
         Clock.unschedule(self.on_timer)
         Clock.schedule_interval(self.on_timer, TWEEN_STEP)
 
-    def prop_binder(self, src, val, prop_name=None):
-        setattr(self, prop_name, val)
-
     def on_timer(self, dt):
         if self.progress > 1.0:
             Clock.unschedule(self.on_timer)
             for prop_name in self.prop_names():
-                cb = self.callbacks[prop_name] = partial(
-                    self.prop_binder, prop_name=prop_name)
+                cb = self.callbacks[prop_name] = self.setter(prop_name)
                 self.pb.bind(**{prop_name: cb})
             return
 
