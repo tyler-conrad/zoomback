@@ -9,23 +9,25 @@ from setuptools import find_packages
 from os import environ
 
 from paver.setuputils import setup
-from paver.options import Bunch
-from paver.path import path
-from paver.tasks import task
-from paver.tasks import needs
-from paver.easy import error
+from paver.easy import Bunch
+from paver.easy import path
+from paver.easy import sh
+from paver.easy import task
+from paver.easy import needs
 from paver.easy import no_help
+from paver.easy import consume_args
+from paver.easy import error
 from Cython.Build.Dependencies import cythonize
 
 import distutils.command.build_ext
 import Cython.Distutils.build_ext
 distutils.command.build_ext = Cython.Distutils.build_ext
 
-try:
-    KIVYPATH = path(environ['KIVYPATH'])
-except KeyError:
-    error('KIVYPATH environment variable not set.')
-    exit(1)
+from package.util import env
+from package.android import Config
+
+KIVYPATH = env('KIVYPATH')
+P4APATH = env('P4APATH')
 
 def find(glob, dir=path('zoomback')):
     return dir.walkfiles(glob)
@@ -53,8 +55,7 @@ setup(**Bunch(
     package_data={'zoomback': ['view/*.kv']},
     install_requires=["kivy"],
     tests_require=[],
-    classifiers=[]
-))
+    classifiers=[]))
 
 def change_ext(file, ext):
     return file.parent / file.namebase + ext
@@ -115,3 +116,23 @@ def del_pyc():
 @task
 def clean():
     path("build").rmtree_p()
+
+class BuildConfig(Config):
+    pass
+
+@task
+def p4a_mods():
+    sh((P4APATH / 'distribute.sh') + ' -l', cwd=P4APATH)
+
+@task
+@consume_args
+def p4a_dist(args):
+    mod_list = ['kivy']
+    sh((P4APATH / 'distribute.sh')
+        + ((' -d ' + args[0]) if args else '')
+        + ' -m "' + ' '.join(mod_list) + '"',
+        cwd=P4APATH)
+
+@task
+def p4a_clean():
+    sh((P4APATH / 'distribute.sh') + ' -f', cwd=P4APATH)
