@@ -10,6 +10,7 @@ from os import environ
 from paver.easy import sh
 from paver.path import path
 
+from package.util import version
 from package.util import env
 from package.util import QueryDict
 
@@ -18,7 +19,7 @@ class Config(object):
         opt = self.options = QueryDict()
         opt.name = 'zoomback'
         opt.package = '.'.join(['com', 'dodeca', opt.name])
-        opt.version = sh('git describe --tags master', capture=True).split('-')[0]
+        opt.version = version()
         opt.dir = path('.').realpath()
         opt.private = None
         opt.launcher = None

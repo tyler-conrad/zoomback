@@ -7,8 +7,12 @@
 
 from os import environ
 
-from paver.path import path
+from paver.easy import sh
+from paver.easy import path
 from paver.easy import error
+
+def version():
+    return sh('git describe --tags master', capture=True).split('-')[0]
 
 def env(env_var):
     try:

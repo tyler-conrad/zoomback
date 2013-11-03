@@ -24,6 +24,7 @@ import distutils.command.build_ext
 import Cython.Distutils.build_ext
 distutils.command.build_ext = Cython.Distutils.build_ext
 
+from package.util import version
 from package.util import env
 from package.util import change_ext
 from package.android import Config
@@ -41,7 +42,7 @@ setup(**Bunch(
     long_description='',
     url='',
     download_url='',
-    version='0.0.1',
+    version=version(),
     license='',
     author='Tyler Conrad',
     author_email='conradt80@gmail.com',
