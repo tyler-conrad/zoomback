@@ -151,6 +151,9 @@ def p4a_dist(args):
 @task
 @consume_args
 def p4a_build(args):
+    for c_file in find('*.c'):
+        cyand(c_file)
+    
     dist_path = P4APATH / 'dist' / args[0]
     sh((dist_path / 'build.py') + ' '
         + Config().option_string() + ' '

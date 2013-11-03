@@ -20,8 +20,8 @@ class Config(object):
         opt.name = 'zoomback'
         opt.package = '.'.join(['com', 'dodeca', opt.name])
         opt.version = version()
-        opt.dir = path('.').realpath()
-        opt.private = None
+        opt.dir = None
+        opt.private = path('.').realpath()
         opt.launcher = None
         opt.icon_name = None
         opt.orientation = 'sensor'
@@ -32,7 +32,7 @@ class Config(object):
         opt.install_location = 'auto'
         opt.compile_pyo = None
         opt.intent_filters = None
-        opt.blacklist = None # path('package').realpath() / 'blacklist.txt'
+        opt.blacklist = path('package').realpath() / 'blacklist.txt'
         opt.sdk = '8'
         opt.minsdk = '8'
         opt.window = None
