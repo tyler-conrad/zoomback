@@ -1,8 +1,11 @@
+setup.py
 .build
 .project
 .pydevproject
 .renamed
 *.pyc
+*.pyo
 *.c
+*.o
 *.so
 build/*

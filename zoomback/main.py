@@ -7,32 +7,28 @@
 
 from kivy.app import App
 from kivy.lang import Builder
-from kivy.uix.widget import Widget
-from kivy.graphics import ClearColor
-from kivy.properties import NumericProperty
-
 from kivy.clock import Clock
-
+from kivy.uix.widget import Widget
+ 
 from patchloader import load
 
 class Test(Widget):
-    _x = NumericProperty()
-    _y = NumericProperty()
+    pass
 
 class ZoomBack(App):
     def load_blank(self, dt):
         load('zoomback/blank.kv')
-
+ 
     def load_blah(self, dt):
         load('zoomback/patch.kv')
-
+ 
     def build(self):
         load('zoomback/patch.kv')
         Clock.schedule_once(self.load_blank, 5)
         Clock.schedule_once(self.load_blah, 10)
         return Builder.load_string('''
 #:import tpb patchboard.tpb
-
+ 
 Test:
     canvas:
         Color:

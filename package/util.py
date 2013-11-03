@@ -17,6 +17,9 @@ def env(env_var):
         error(env_var + ' environment variable not set.')
         exit(1)
 
+def change_ext(file, ext):
+    return file.parent / file.namebase + ext
+
 class QueryDict(dict):
     def __getattr__(self, attr):
         try:

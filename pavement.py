@@ -24,7 +24,9 @@ import Cython.Distutils.build_ext
 distutils.command.build_ext = Cython.Distutils.build_ext
 
 from package.util import env
+from package.util import change_ext
 from package.android import Config
+from package.cyand import cyand
 
 KIVYPATH = env('KIVYPATH')
 P4APATH = env('P4APATH')
@@ -50,15 +52,11 @@ setup(**Bunch(
         include_path=['.', KIVYPATH],
         aliases={
             'KIVYPATH': KIVYPATH}),
-    package_dir={'.': 'zoomback'},
-    packages=find_packages('.'),
+    packages=['zoomback'],
     package_data={'zoomback': ['view/*.kv']},
     install_requires=["kivy"],
     tests_require=[],
     classifiers=[]))
-
-def change_ext(file, ext):
-    return file.parent / file.namebase + ext
 
 @task
 @no_help
@@ -97,27 +95,41 @@ def py_from_pyx():
             continue
 
 @task
-def clean_package():
-    for c in find('*.c'):
-        c.remove()
-    for so in find('*.so'):
-        so.remove()
-
-@task
-@needs('py_from_pyx', 'clean_package')
+@needs('py_from_pyx', 'clobber')
 def uncomp():
     pass
 
+def remove(glob):
+    for match in find(glob):
+        match.remove()
+
 @task
 def del_pyc():
-    for pyc in find('*.pyc'):
-        pyc.remove()
+    remove('*.pyc')
+
+@task
+def del_pyo():
+    remove('*.pyo')
+
+@task
+def del_c():
+    remove('*.c')
+
+@task
+def del_o():
+    remove('*.o')
+
+@task
+def del_so():
+    remove('*.so')
 
 @task
 def clean():
     path("build").rmtree_p()
 
-class BuildConfig(Config):
+@task
+@needs(['del_pyc', 'del_pyo', 'del_c', 'del_o', 'del_so'])
+def clobber():
     pass
 
 @task
@@ -125,14 +137,34 @@ def p4a_mods():
     sh((P4APATH / 'distribute.sh') + ' -l', cwd=P4APATH)
 
 @task
+@needs(['generate_setup'])
 @consume_args
 def p4a_dist(args):
-    mod_list = ['kivy']
+    mod_list = [
+        'kivy',
+        'zoomback']
+    dist_name = args[0] if args else None
+    clean_flag = '-f' if 'clean' in args else ''
     sh((P4APATH / 'distribute.sh')
-        + ((' -d ' + args[0]) if args else '')
-        + ' -m "' + ' '.join(mod_list) + '"',
+        + ((' -d ' + dist_name) if dist_name else '')
+        + ' -m "' + ' '.join(mod_list) + '"'
+        + ' ' + clean_flag,
         cwd=P4APATH)
+    dist_root = P4APATH / 'dist' / dist_name 
+    (dist_root / 'default.properties').rename(dist_root / 'project.properties')
 
 @task
-def p4a_clean():
-    sh((P4APATH / 'distribute.sh') + ' -f', cwd=P4APATH)
+@consume_args
+def p4a_build(args):
+    dist_path = P4APATH / 'dist' / args[0]
+    sh((dist_path / 'build.py') + ' '
+        + Config().option_string() + ' '
+        + args[1],
+        cwd=dist_path)
+
+@task
+@needs(['build'])
+def android():
+    build_path = path('build') / 'lib.linux-x86_64-2.7'
+    for c_file in find('*.c'):
+        cyand(c_file, build_path)

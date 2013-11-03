@@ -9,8 +9,8 @@ from functools import partial
 
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
+from kivy.properties import FakeBoundedNumericProperty as FBNP
 
-from properties import FakeBoundedNumericProperty as FBNP
 from slapdash import Walker
 
 class PatchBoard(Widget):

@@ -19,19 +19,19 @@ class Config(object):
         opt.name = 'zoomback'
         opt.package = '.'.join(['com', 'dodeca', opt.name])
         opt.version = sh('git describe --tags master', capture=True).split('-')[0]
-        opt.dir = path('zoomback').realpath()
+        opt.dir = path('android').realpath()
         opt.private = None
         opt.launcher = None
         opt.icon_name = None
         opt.orientation = 'sensor'
-        opt.permission = None
+        opt.permission = ' '.join(['READ_EXTERNAL_STORAGE'])
         opt.ignore_path = None
         opt.icon = None
         opt.presplash = None
         opt.install_location = 'auto'
         opt.compile_pyo = None
         opt.intent_filters = None
-        opt.blacklist = path('package').realpath() / 'blacklist.txt'
+        opt.blacklist = None # path('package').realpath() / 'blacklist.txt'
         opt.sdk = '8'
         opt.minsdk = '8'
         opt.window = None
