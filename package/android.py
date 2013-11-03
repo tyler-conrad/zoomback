@@ -19,7 +19,7 @@ class Config(object):
         opt.name = 'zoomback'
         opt.package = '.'.join(['com', 'dodeca', opt.name])
         opt.version = sh('git describe --tags master', capture=True).split('-')[0]
-        opt.dir = path('android').realpath()
+        opt.dir = path('.').realpath()
         opt.private = None
         opt.launcher = None
         opt.icon_name = None

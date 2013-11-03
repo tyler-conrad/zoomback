@@ -11,7 +11,7 @@ from kivy.clock import Clock
 from kivy.uix.widget import Widget
 from kivy.properties import FakeBoundedNumericProperty as FBNP
 
-from slapdash import Walker
+from zoomback.slapdash import Walker
 
 class PatchBoard(Widget):
     _x = FBNP(256, min=0, max=512)

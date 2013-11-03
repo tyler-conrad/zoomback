@@ -7,8 +7,8 @@
 
 from kivy.lang import Builder
 
-from patchboard import tpb
-from patchboard import pb
+from zoomback.patchboard import tpb
+from zoomback.patchboard import pb
 
 cur_patch = None
 def load(patch):

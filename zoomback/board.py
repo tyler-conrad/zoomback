@@ -5,6 +5,6 @@
 
 """
 
-from patchboard import PatchBoard
+from zoomback.patchboard import PatchBoard
 
 pb = PatchBoard()

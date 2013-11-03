@@ -7,6 +7,5 @@ export CYTHONPATH=~/Desktop/env/cython
 export PAVERPATH=~/Desktop/env/paver
 #export PYTHON=$P4APATH/build/python-install/bin/python.host
 #export PATH=$ANDROIDNDK:$ANDROIDSDK/platform-tools:$ANDROIDSDK/tools:$PATH
-export KIVYPATH=$P4APATH/build/kivy/kivy-stable
 export ZOOMBACKPATH=~/Desktop/env/zoomback
 export SETUPTOOLSPATH=~/env/setuptools

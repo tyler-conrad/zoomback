@@ -16,6 +16,7 @@ from paver.easy import task
 from paver.easy import needs
 from paver.easy import no_help
 from paver.easy import consume_args
+from paver.easy import debug
 from paver.easy import error
 from Cython.Build.Dependencies import cythonize
 
@@ -53,8 +54,8 @@ setup(**Bunch(
         aliases={
             'KIVYPATH': KIVYPATH}),
     packages=['zoomback'],
-    package_data={'zoomback': ['view/*.kv']},
-    install_requires=["kivy"],
+    package_data={'zoomback': ['*.kv']},
+    install_requires=['kivy'],
     tests_require=[],
     classifiers=[]))
 
@@ -128,21 +129,14 @@ def clean():
     path("build").rmtree_p()
 
 @task
-@needs(['del_pyc', 'del_pyo', 'del_c', 'del_o', 'del_so'])
+@needs(['clean','del_pyc', 'del_pyo', 'del_c', 'del_o', 'del_so'])
 def clobber():
     pass
 
 @task
-def p4a_mods():
-    sh((P4APATH / 'distribute.sh') + ' -l', cwd=P4APATH)
-
-@task
-@needs(['generate_setup'])
 @consume_args
 def p4a_dist(args):
-    mod_list = [
-        'kivy',
-        'zoomback']
+    mod_list = ['kivy']
     dist_name = args[0] if args else None
     clean_flag = '-f' if 'clean' in args else ''
     sh((P4APATH / 'distribute.sh')
@@ -161,10 +155,3 @@ def p4a_build(args):
         + Config().option_string() + ' '
         + args[1],
         cwd=dist_path)
-
-@task
-@needs(['build'])
-def android():
-    build_path = path('build') / 'lib.linux-x86_64-2.7'
-    for c_file in find('*.c'):
-        cyand(c_file, build_path)
