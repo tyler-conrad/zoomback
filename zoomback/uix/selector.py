@@ -25,12 +25,7 @@ class Selector(Drawer):
     def __init__(self, *args):
         super(Selector, self).__init__(*args)
         Clock.schedule_once(self.do_load, -1)
-#        side_panel = BoxLayout()
-#         self.add_widget(side_panel)
 
-        
-#         for config_file in listdir('zoomback/config'):
-#             side_panel.add_widget(Button(text=config_file))
     def set_text(self, cls, text):
         next(q(self, cls=[cls])).text = text
 
@@ -41,7 +36,7 @@ class Selector(Drawer):
         self.set_text('config', config)
         
         config_widget = Builder.load_file(
-            'zoomback/config/' + config + '.kv')
+            'zoomback/config/config/' + config + '.kv')
         self.add_widget(config_widget)
         
         self.filter_list = []
@@ -54,3 +49,6 @@ class Selector(Drawer):
         
     def on_filter(self, src, filter):
         self.set_text('filter', obj_name(filter))
+    
+    def on_patch(self, src, patch):
+        self.set_text('patch', patch)
