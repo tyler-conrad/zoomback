@@ -55,7 +55,7 @@ setup(**Bunch(
         aliases={
             'KIVYPATH': KIVYPATH}),
     packages=['zoomback'],
-    package_data={'zoomback': ['*.kv']},
+    package_data={'zoomback': ['config/*.kv']},
     install_requires=['kivy'],
     tests_require=[],
     classifiers=[]))
