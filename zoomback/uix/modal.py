@@ -14,11 +14,13 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.adapters.listadapter import ListAdapter
 
 from zoomback.util.query import kvquery as q
+from zoomback.util.misc import root
 
 class ListToggleButton(ToggleButton):
     def select(self, *args):
         self.state = 'down'
         next(q(Window, cls=['config_modal'])).dismiss()
+        next(q(root(), cls=['selector'])).config = self.text
 
     def deselect(self, *args):
         self.state = 'normal'
